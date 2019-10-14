@@ -8,6 +8,7 @@ import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.engineerskasa.winey.Adapter.CategoryAdapter;
 import com.engineerskasa.winey.Model.Banner;
 import com.engineerskasa.winey.Model.Category;
+import com.engineerskasa.winey.Model.Drink;
 import com.engineerskasa.winey.R;
 import com.engineerskasa.winey.Retrofit.IWineyAPI;
 import com.engineerskasa.winey.Util.Common;
@@ -105,8 +106,24 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         getBannerImage();
         // get menu
         getMenu();
+        // get newest topping list
+        getToppingList();
     }
 
+    // display additional content in cart page based on ID
+    private void getToppingList() {
+        compositeDisposable.add(mService.getDrink(Common.TOPPING_MENU_ID)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Consumer<List<Drink>>() {
+            @Override
+            public void accept(List<Drink> drinks) throws Exception {
+                Common.toppingList = drinks;
+            }
+        }));
+    }
+
+    // get all Categories from API
     private void getMenu() {
         compositeDisposable.add(mService.getMenu()
         .subscribeOn(Schedulers.io())
@@ -119,11 +136,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }));
     }
 
+    // display categories
     private void displayMenu(List<Category> categories) {
         CategoryAdapter adapter = new CategoryAdapter(this, categories);
         lst_menu.setAdapter(adapter);
     }
 
+    // get banner from API
     private void getBannerImage() {
         compositeDisposable.add(mService.getBanners()
                 .subscribeOn(Schedulers.io())
@@ -136,6 +155,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 }));
     }
 
+    // display banner image
     private void displayImage(List<Banner> banners) {
         HashMap<String, String> bannerMap = new HashMap<>();
         for (Banner item : banners)

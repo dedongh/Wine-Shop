@@ -48,6 +48,7 @@ public class DrinkActivity extends AppCompatActivity {
         loadListDrink(Common.currentCategory.ID);
     }
 
+    // fetch all drinks based on ID
     private void loadListDrink(String menuId) {
         compositeDisposable.add(mService.getDrink(menuId)
         .subscribeOn(Schedulers.io())
@@ -60,6 +61,7 @@ public class DrinkActivity extends AppCompatActivity {
         }));
     }
 
+    // display drinks from API
     private void displayDrinkList(List<Drink> drinks) {
         DrinkAdapter adapter = new DrinkAdapter(this, drinks);
         lst_drink.setAdapter(adapter);

@@ -41,8 +41,9 @@ public class CategoryAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         CategoryViewHolder viewHolder = (CategoryViewHolder)holder;
         Picasso.with(context)
-                .load(categories.get(position)
-                .Link)
+                .load(categories.get(position).Link)
+                .fit()
+                .centerCrop()
                 .into(viewHolder.img_product);
 
         viewHolder.txt_menu_name.setText(categories.get(position).Name);
